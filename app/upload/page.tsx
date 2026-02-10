@@ -150,7 +150,11 @@ export default function UploadPage() {
       const uploadResult = await uploadAppFiles(appId, files);
       if (!uploadResult.success) {
         // Clean up app record if upload fails
-        await supabase.from('apps').delete().eq('id', appId).catch(console.error);
+        try {
+          await supabase.from('apps').delete().eq('id', appId);
+        } catch (cleanupError) {
+          console.error('Failed to cleanup app record:', cleanupError);
+        }
         throw new Error(uploadResult.error || 'Failed to upload files to storage. Make sure the storage bucket "apps" exists and is public.');
       }
 
