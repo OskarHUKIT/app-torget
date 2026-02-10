@@ -57,7 +57,7 @@ export default async function AppDetailPage({ params }: { params: { id: string }
                     {app.category}
                   </span>
                 )}
-                {app.tags.map((tag) => (
+                {app.tags.map((tag: string) => (
                   <span
                     key={tag}
                     className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm"
