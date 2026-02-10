@@ -20,15 +20,14 @@ export default function InstallButton({ app }: InstallButtonProps) {
       const appWindow = window.open(app.install_url, '_blank');
       
       // Track install (increment count)
-      // Note: This is a simple approach - in production you'd want to track actual installs
-      await supabase.rpc('increment_app_installs', { app_id: app.id }).catch(() => {
-        // Fallback if RPC doesn't exist - update directly
-        supabase
+      try {
+        await supabase
           .from('apps')
           .update({ install_count: app.install_count + 1 })
-          .eq('id', app.id)
-          .then(() => {});
-      });
+          .eq('id', app.id);
+      } catch {
+        // Ignore - install tracking is best-effort
+      }
 
       // Give user instructions
       setTimeout(() => {
