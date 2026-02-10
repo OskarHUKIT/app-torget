@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import InstallPrompt from "@/components/InstallPrompt";
 
 export const metadata: Metadata = {
   title: "App Torget - Web App Marketplace",
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body>
         <Navbar />
         {children}
+        <InstallPrompt />
       </body>
     </html>
   );
