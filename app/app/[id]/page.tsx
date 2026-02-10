@@ -81,7 +81,7 @@ export default async function AppDetailPage({ params }: { params: { id: string }
             <div className="mt-8">
               <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Screenshots</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {app.screenshots.map((screenshot, index) => (
+                {app.screenshots.map((screenshot: string, index: number) => (
                   <div key={index} className="relative aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
                     <Image
                       src={screenshot}
