@@ -234,12 +234,12 @@ export default function UploadPage() {
               <p className="text-sm">{error}</p>
               {error.includes('Database error') && (
                 <p className="text-xs mt-2">
-                  Make sure you've run the database migration in Supabase SQL Editor.
+                  Make sure you&apos;ve run the database migration in Supabase SQL Editor.
                 </p>
               )}
               {error.includes('storage bucket') && (
                 <p className="text-xs mt-2">
-                  Make sure you've created a public storage bucket named "apps" in Supabase.
+                  Make sure you&apos;ve created a public storage bucket named &quot;apps&quot; in Supabase.
                 </p>
               )}
             </div>

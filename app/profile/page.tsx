@@ -37,7 +37,7 @@ export default async function ProfilePage() {
           <AppGrid apps={apps} />
         ) : (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-12 text-center">
-            <p className="text-gray-500 dark:text-gray-400 mb-4">You haven't uploaded any apps yet.</p>
+            <p className="text-gray-500 dark:text-gray-400 mb-4">You haven&apos;t uploaded any apps yet.</p>
             <Link
               href="/upload"
               className="text-blue-600 hover:text-blue-700 font-medium"

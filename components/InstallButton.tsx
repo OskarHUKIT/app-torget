@@ -53,7 +53,7 @@ export default function InstallButton({ app }: InstallButtonProps) {
         {installing ? 'Opening...' : '📱 Install App'}
       </button>
       <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-        Click to open the app. Then use your browser's "Add to Home Screen" option to install it.
+        Click to open the app. Then use your browser&apos;s &quot;Add to Home Screen&quot; option to install it.
       </p>
     </div>
   );

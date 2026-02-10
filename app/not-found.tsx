@@ -9,7 +9,7 @@ export default function NotFound() {
           App Not Found
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mb-8">
-          The app you're looking for doesn't exist or has been removed.
+          The app you&apos;re looking for doesn&apos;t exist or has been removed.
         </p>
         <Link
           href="/"
