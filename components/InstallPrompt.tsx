@@ -13,12 +13,13 @@ export default function InstallPrompt() {
 
     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const isStandaloneMode = (window as any).navigator?.standalone === true;
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const dismissed = localStorage.getItem('app-torget-install-dismissed');
 
     setIsIOS(isIOSDevice);
     setIsStandalone(isStandaloneMode);
 
-    if (!isStandaloneMode && !dismissed) {
+    if (isMobile && !isStandaloneMode && !dismissed) {
       setShow(true);
     }
   }, []);

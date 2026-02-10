@@ -8,8 +8,16 @@ import { useEffect, useState } from 'react';
 export default function Navbar() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [showInstallModal, setShowInstallModal] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsIOS(/iPad|iPhone|iPod/.test(navigator.userAgent));
+    }
+  }, []);
 
   useEffect(() => {
     const getUser = async () => {
@@ -42,7 +50,15 @@ export default function Navbar() {
               App Torget
             </Link>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <button
+              onClick={() => setShowInstallModal(true)}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-semibold flex items-center gap-2 shrink-0"
+            >
+              <span>📲</span>
+              <span className="hidden sm:inline">Download App</span>
+              <span className="sm:hidden">Download</span>
+            </button>
             <Link
               href="/"
               className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
@@ -89,6 +105,57 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+
+      {showInstallModal && (
+        <div
+          className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center p-0 sm:p-4"
+          onClick={() => setShowInstallModal(false)}
+        >
+          <div
+            className="bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl max-w-md w-full p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                Add App Torget to Your Phone
+              </h3>
+              <button
+                onClick={() => setShowInstallModal(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl leading-none w-8 h-8"
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </div>
+            {isIOS ? (
+              <ol className="space-y-4 text-gray-600 dark:text-gray-300 text-sm">
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center font-bold">1</span>
+                  <span>Tap the <strong>Share</strong> button (□↑) at the bottom of Safari</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center font-bold">2</span>
+                  <span>Tap <strong>Add to Home Screen</strong></span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center font-bold">3</span>
+                  <span>Tap <strong>Add</strong> in the top right</span>
+                </li>
+              </ol>
+            ) : (
+              <p className="text-gray-600 dark:text-gray-300 text-sm">
+                Tap the menu (⋮) in your browser and look for <strong>Install app</strong> or <strong>Add to Home screen</strong>.
+              </p>
+            )}
+            <button
+              onClick={() => setShowInstallModal(false)}
+              className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg"
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
