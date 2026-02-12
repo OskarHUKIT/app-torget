@@ -86,7 +86,7 @@ export default function UploadPage() {
           icon_url: metadata.iconUrl,
           author_id: user.id,
           category: category || null,
-          status: 'pending',
+          status: 'approved',
         })
         .select()
         .single();
@@ -100,7 +100,7 @@ export default function UploadPage() {
         throw new Error('Failed to create app record');
       }
 
-      // Full page navigation so server receives cookies and owner can view pending app
+      // Full page navigation so server receives cookies and owner can view app
       window.location.href = `/app/${app.id}`;
     } catch (err) {
       console.error('Upload error:', err);
@@ -148,7 +148,7 @@ export default function UploadPage() {
           manifest_url: getAppBaseUrl(appId).replace('index.html', 'manifest.json'),
           author_id: user.id,
           category: category.trim() || null,
-          status: 'pending',
+          status: 'approved',
         })
         .select()
         .single();
@@ -217,7 +217,7 @@ export default function UploadPage() {
           icon_url: iconUrl,
           author_id: user.id,
           category: category.trim() || null,
-          status: 'pending',
+          status: 'approved',
         })
         .select()
         .single();
@@ -231,7 +231,7 @@ export default function UploadPage() {
         throw new Error('Failed to create app record');
       }
 
-      // Full page navigation so server receives cookies and owner can view pending app
+      // Full page navigation so server receives cookies and owner can view app
       window.location.href = `/app/${app.id}`;
     } catch (err) {
       console.error('Upload error:', err);
