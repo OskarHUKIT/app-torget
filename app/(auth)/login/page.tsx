@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 function LoginForm() {
@@ -10,9 +10,9 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
   const searchParams = useSearchParams();
   const supabase = createClient();
+  const checkEmailMessage = searchParams.get('message') === 'check-email';
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,8 +28,8 @@ function LoginForm() {
       if (error) throw error;
 
       const redirect = searchParams.get('redirect') || '/';
-      router.push(redirect);
-      router.refresh();
+      // Use full page navigation so cookies are sent before Next.js makes any requests
+      window.location.href = redirect;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -50,6 +50,11 @@ function LoginForm() {
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
+          {checkEmailMessage && (
+            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded">
+              Check your email to confirm your account, then sign in below.
+            </div>
+          )}
           {error && (
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded">
               {error}

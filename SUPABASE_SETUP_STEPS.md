@@ -56,6 +56,15 @@
    - You should see a green success message: **"Success. No rows returned"**
    - If you see errors (red text), let me know what they say!
 
+### Additional Migration: Add Link Support (002)
+
+If you already ran `001_initial_schema.sql` and want to support "Add Link" (external URLs like itch.io):
+
+1. Open `supabase/migrations/002_external_link_apps.sql`
+2. Copy all contents and paste into SQL Editor
+3. Run it
+4. This adds the `external_link` upload type and makes `manifest_url` nullable
+
 ### Option B: Using Table Editor (Alternative - Manual)
 
 If SQL Editor doesn't work, you can create tables manually:

@@ -31,7 +31,7 @@ export default function InstallButton({ app }: InstallButtonProps) {
 
       // Give user instructions
       setTimeout(() => {
-        if (appWindow) {
+        if (appWindow && app.upload_type !== 'external_link') {
           alert('The app has opened in a new window. Look for the "Add to Home Screen" option in your browser menu to install it as a PWA.');
         }
       }, 500);
@@ -42,6 +42,8 @@ export default function InstallButton({ app }: InstallButtonProps) {
     }
   };
 
+  const isExternalLink = app.upload_type === 'external_link';
+
   return (
     <div>
       <button
@@ -49,10 +51,12 @@ export default function InstallButton({ app }: InstallButtonProps) {
         disabled={installing}
         className="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
-        {installing ? 'Opening...' : '📱 Install App'}
+        {installing ? 'Opening...' : isExternalLink ? 'Open App' : '📱 Install App'}
       </button>
       <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-        Click to open the app. Then use your browser&apos;s &quot;Add to Home Screen&quot; option to install it.
+        {isExternalLink
+          ? 'Opens the app in a new tab. You can bookmark it or add a shortcut to your home screen.'
+          : 'Click to open the app. Then use your browser\'s "Add to Home Screen" option to install it.'}
       </p>
     </div>
   );

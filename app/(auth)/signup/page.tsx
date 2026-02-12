@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function SignupPage() {
@@ -11,7 +10,6 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
   const supabase = createClient();
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -31,15 +29,21 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
       });
 
       if (error) throw error;
 
-      router.push('/');
-      router.refresh();
+      // If email confirmation is required, user won't have a session yet
+      if (data.session) {
+        // User is signed in (email confirmation disabled) - redirect with full page load so cookies persist
+        window.location.href = '/';
+        return;
+      }
+      // Email confirmation required - redirect to login with message
+      window.location.href = '/login?message=check-email';
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

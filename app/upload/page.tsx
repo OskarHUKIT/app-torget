@@ -8,9 +8,20 @@ import { uploadAppFiles, getAppBaseUrl } from '@/lib/storage';
 import { App, UploadType } from '@/lib/types';
 import Link from 'next/link';
 
+function getFaviconUrl(url: string): string | null {
+  try {
+    const fullUrl = url.startsWith('http') ? url : `https://${url}`;
+    const hostname = new URL(fullUrl).hostname;
+    return `https://www.google.com/s2/favicons?domain=${hostname}&sz=128`;
+  } catch {
+    return null;
+  }
+}
+
 export default function UploadPage() {
-  const [uploadType, setUploadType] = useState<'vercel_url' | 'file_upload'>('vercel_url');
+  const [uploadType, setUploadType] = useState<'vercel_url' | 'file_upload' | 'external_link'>('vercel_url');
   const [vercelUrl, setVercelUrl] = useState('');
+  const [linkUrl, setLinkUrl] = useState('');
   const [files, setFiles] = useState<File[]>([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -168,6 +179,63 @@ export default function UploadPage() {
     }
   };
 
+  const handleExternalLinkSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      if (!user) {
+        throw new Error('You must be logged in to add links');
+      }
+
+      if (!linkUrl.trim()) {
+        throw new Error('Please enter a valid URL');
+      }
+
+      if (!name.trim()) {
+        throw new Error('Please enter an app name');
+      }
+
+      const fullUrl = linkUrl.startsWith('http') ? linkUrl : `https://${linkUrl}`;
+      const iconUrl = getFaviconUrl(fullUrl);
+
+      const { data: app, error: dbError } = await supabase
+        .from('apps')
+        .insert({
+          name: name.trim(),
+          description: description.trim() || null,
+          upload_type: 'external_link' as UploadType,
+          external_url: fullUrl,
+          install_url: fullUrl,
+          manifest_url: null,
+          icon_url: iconUrl,
+          author_id: user.id,
+          category: category.trim() || null,
+          status: 'pending',
+        })
+        .select()
+        .single();
+
+      if (dbError) {
+        console.error('Database error:', dbError);
+        throw new Error(`Database error: ${dbError.message}. Make sure the database migration has been run.`);
+      }
+
+      if (!app) {
+        throw new Error('Failed to create app record');
+      }
+
+      router.push(`/app/${app.id}`);
+      router.refresh();
+    } catch (err) {
+      console.error('Upload error:', err);
+      setError(err instanceof Error ? err.message : 'An error occurred while adding link');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFiles(Array.from(e.target.files));
@@ -209,10 +277,10 @@ export default function UploadPage() {
         <h1 className="text-3xl font-bold mb-8">Upload App</h1>
 
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-          <div className="flex space-x-4 mb-6">
+          <div className="flex flex-wrap gap-2 mb-6">
             <button
               onClick={() => setUploadType('vercel_url')}
-              className={`flex-1 py-2 px-4 rounded ${
+              className={`flex-1 min-w-0 py-2 px-4 rounded ${
                 uploadType === 'vercel_url'
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
@@ -222,13 +290,23 @@ export default function UploadPage() {
             </button>
             <button
               onClick={() => setUploadType('file_upload')}
-              className={`flex-1 py-2 px-4 rounded ${
+              className={`flex-1 min-w-0 py-2 px-4 rounded ${
                 uploadType === 'file_upload'
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
               }`}
             >
               Upload Files
+            </button>
+            <button
+              onClick={() => setUploadType('external_link')}
+              className={`flex-1 min-w-0 py-2 px-4 rounded ${
+                uploadType === 'external_link'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+              }`}
+            >
+              Add Link
             </button>
           </div>
 
@@ -298,6 +376,61 @@ export default function UploadPage() {
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md disabled:opacity-50"
               >
                 {loading ? 'Validating...' : 'Submit App'}
+              </button>
+            </form>
+          ) : uploadType === 'external_link' ? (
+            <form onSubmit={handleExternalLinkSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">App URL</label>
+                <input
+                  type="url"
+                  value={linkUrl}
+                  onChange={(e) => setLinkUrl(e.target.value)}
+                  placeholder="https://example.com or https://gamechanging.itch.io/samle-flokken"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700"
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Any web URL: games, tools, itch.io, etc. No PWA required.
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">App Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="My Awesome App"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Description (optional)</label>
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Describe your app..."
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Category (optional)</label>
+                <input
+                  type="text"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  placeholder="Games, Tools, etc."
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md disabled:opacity-50"
+              >
+                {loading ? 'Adding...' : 'Add Link'}
               </button>
             </form>
           ) : (

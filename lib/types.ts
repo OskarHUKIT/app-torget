@@ -1,4 +1,4 @@
-export type UploadType = 'vercel_url' | 'file_upload' | 'github';
+export type UploadType = 'vercel_url' | 'file_upload' | 'github' | 'external_link';
 
 export type AppStatus = 'pending' | 'approved' | 'rejected';
 
@@ -12,7 +12,7 @@ export interface App {
   github_url: string | null;
   icon_url: string | null;
   screenshots: string[];
-  manifest_url: string;
+  manifest_url: string | null;
   install_url: string;
   author_id: string;
   category: string | null;

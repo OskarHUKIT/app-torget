@@ -6,9 +6,16 @@ export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   let apps = [];
-  let error = null;
+  let error: Error | null = null;
 
   try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('Missing Supabase credentials. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment variables.');
+    }
+
     const supabase = await createClient();
 
     const result = await supabase
@@ -19,10 +26,17 @@ export default async function Home() {
       .limit(20);
 
     apps = result.data || [];
-    error = result.error;
+    error = result.error ? new Error(result.error.message) : null;
   } catch (err) {
-    error = err instanceof Error ? err : new Error('Unknown error occurred');
-    console.error('Error fetching apps:', error);
+    const message = err instanceof Error ? err.message : 'Unknown error occurred';
+    const isFetchFailed = message.includes('fetch failed') || (err instanceof TypeError && err.message === 'fetch failed');
+
+    error = new Error(
+      isFetchFailed
+        ? 'Could not connect to Supabase. Common causes: (1) Supabase project is paused - go to supabase.com dashboard and resume it, (2) Wrong URL/key in environment variables, (3) Network/firewall blocking the connection.'
+        : message
+    );
+    console.error('Error fetching apps:', err);
   }
 
   return (
@@ -48,10 +62,14 @@ export default async function Home() {
         {error ? (
           <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded mb-4">
             <p className="font-semibold mb-2">Error loading apps:</p>
-            <p>{error.message || 'Failed to connect to database'}</p>
-            <p className="text-sm mt-2">
-              Make sure your Supabase credentials in .env.local are correct and the database migration has been run.
-            </p>
+            <p>{error.message}</p>
+            <ul className="text-sm mt-2 list-disc list-inside space-y-1">
+              <li>Supabase project paused? Check dashboard and resume it</li>
+              <li>On Vercel? Add env vars in Project Settings</li>
+              <li>Locally? Check .env.local has correct credentials</li>
+              <li>Run the database migration in Supabase SQL Editor</li>
+            </ul>
+            <a href="/debug" className="text-sm mt-2 inline-block underline">Check connection at /debug</a>
           </div>
         ) : apps.length === 0 ? (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-12 text-center">
