@@ -100,8 +100,8 @@ export default function UploadPage() {
         throw new Error('Failed to create app record');
       }
 
-      router.push(`/app/${app.id}`);
-      router.refresh();
+      // Full page navigation so server receives cookies and owner can view pending app
+      window.location.href = `/app/${app.id}`;
     } catch (err) {
       console.error('Upload error:', err);
       setError(err instanceof Error ? err.message : 'An error occurred while uploading');
@@ -174,8 +174,8 @@ export default function UploadPage() {
         throw new Error(uploadResult.error || 'Failed to upload files to storage. Make sure the storage bucket "apps" exists and is public.');
       }
 
-      router.push(`/app/${app.id}`);
-      router.refresh();
+      // Full page navigation so server receives cookies and owner can view pending app
+      window.location.href = `/app/${app.id}`;
     } catch (err) {
       console.error('Upload error:', err);
       setError(err instanceof Error ? err.message : 'An error occurred while uploading');
@@ -231,8 +231,8 @@ export default function UploadPage() {
         throw new Error('Failed to create app record');
       }
 
-      router.push(`/app/${app.id}`);
-      router.refresh();
+      // Full page navigation so server receives cookies and owner can view pending app
+      window.location.href = `/app/${app.id}`;
     } catch (err) {
       console.error('Upload error:', err);
       setError(err instanceof Error ? err.message : 'An error occurred while adding link');
