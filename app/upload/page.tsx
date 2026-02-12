@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import { validatePWAFromURL, extractMetadataFromManifest } from '@/lib/app-validator';
+import { extractMetadataFromManifest } from '@/lib/app-validator';
 import { uploadAppFiles, getAppBaseUrl } from '@/lib/storage';
 import { App, UploadType } from '@/lib/types';
 import Link from 'next/link';
@@ -59,10 +59,15 @@ export default function UploadPage() {
         throw new Error('Please enter a valid URL');
       }
 
-      // Validate URL and fetch manifest
-      const validation = await validatePWAFromURL(vercelUrl);
+      // Validate URL and fetch manifest (server-side API avoids CORS)
+      const validateRes = await fetch('/api/validate-pwa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: vercelUrl }),
+      });
+      const validation = await validateRes.json().catch(() => ({}));
       if (!validation.valid || !validation.manifest) {
-        throw new Error(validation.error || 'Invalid PWA - could not find manifest.json');
+        throw new Error(validation.error || 'Invalid PWA - could not find manifest');
       }
 
       // Extract metadata

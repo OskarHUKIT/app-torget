@@ -1,7 +1,14 @@
 import { PWAManifest } from './types';
 
+const MANIFEST_PATHS = [
+  '/manifest.json',
+  '/manifest.webmanifest',
+  '/site.webmanifest',
+  '/app.webmanifest',
+];
+
 /**
- * Validates if a URL points to a valid PWA by checking for manifest.json
+ * Validates if a URL points to a valid PWA by checking for a manifest file
  */
 export async function validatePWAFromURL(url: string): Promise<{
   valid: boolean;
@@ -14,36 +21,77 @@ export async function validatePWAFromURL(url: string): Promise<{
     const fullUrl = url.startsWith('http') ? url : `https://${url}`;
     const baseUrl = new URL(fullUrl).origin;
 
-    // Try to fetch manifest.json
-    const manifestUrl = `${baseUrl}/manifest.json`;
-    const response = await fetch(manifestUrl, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      },
-    });
+    let lastError = '';
 
-    if (!response.ok) {
-      return {
-        valid: false,
-        error: `Could not fetch manifest.json: ${response.statusText}`,
-      };
+    // Try common manifest paths
+    for (const path of MANIFEST_PATHS) {
+      const manifestUrl = `${baseUrl}${path}`;
+      try {
+        const response = await fetch(manifestUrl, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json, application/manifest+json',
+          },
+        });
+
+        if (!response.ok) {
+          lastError = `${path}: ${response.statusText}`;
+          continue;
+        }
+
+        const manifest: PWAManifest = await response.json();
+
+        if (!manifest.name) {
+          return {
+            valid: false,
+            error: 'Manifest missing required field: name',
+          };
+        }
+
+        return {
+          valid: true,
+          manifest,
+          manifestUrl,
+        };
+      } catch {
+        lastError = `${path}: not found`;
+        continue;
+      }
     }
 
-    const manifest: PWAManifest = await response.json();
-
-    // Basic validation
-    if (!manifest.name) {
-      return {
-        valid: false,
-        error: 'Manifest missing required field: name',
-      };
+    // Try to find manifest link in HTML as fallback
+    try {
+      const pageResponse = await fetch(fullUrl, {
+        method: 'GET',
+        headers: { Accept: 'text/html' },
+      });
+      if (pageResponse.ok) {
+        const html = await pageResponse.text();
+        const manifestMatch = html.match(/<link[^>]+rel=["']manifest["'][^>]+href=["']([^"']+)["']/i)
+          || html.match(/<link[^>]+href=["']([^"']+)["'][^>]+rel=["']manifest["']/i);
+        if (manifestMatch) {
+          const manifestHref = manifestMatch[1];
+          const linkedUrl = manifestHref.startsWith('http')
+            ? manifestHref
+            : new URL(manifestHref, baseUrl).href;
+          const mResponse = await fetch(linkedUrl, {
+            headers: { Accept: 'application/json, application/manifest+json' },
+          });
+          if (mResponse.ok) {
+            const manifest: PWAManifest = await mResponse.json();
+            if (manifest.name) {
+              return { valid: true, manifest, manifestUrl: linkedUrl };
+            }
+          }
+        }
+      }
+    } catch {
+      // Ignore HTML parse errors
     }
 
     return {
-      valid: true,
-      manifest,
-      manifestUrl,
+      valid: false,
+      error: `Could not find a PWA manifest. Tried ${MANIFEST_PATHS.join(', ')}. If your app uses a different path, use "Add Link" instead.`,
     };
   } catch (error) {
     return {
