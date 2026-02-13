@@ -86,7 +86,7 @@ export default async function Home() {
           </div>
           <Link
             href="/upload"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium shrink-0"
+            className="bg-nytti-pink hover:bg-nytti-pink-dark text-white px-6 py-3 rounded-lg font-medium shrink-0"
           >
             Last opp
           </Link>
@@ -110,7 +110,7 @@ export default async function Home() {
             </p>
             <Link
               href="/upload"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium"
+              className="inline-block bg-nytti-pink hover:bg-nytti-pink-dark text-white px-6 py-3 rounded-lg font-medium"
             >
               Last opp innhold
             </Link>

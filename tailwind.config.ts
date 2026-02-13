@@ -11,6 +11,8 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        "nytti-pink": "#E93B8A",
+        "nytti-pink-dark": "#D42A7A",
       },
     },
   },

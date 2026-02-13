@@ -267,7 +267,7 @@ export default function UploadPage() {
           </p>
           <Link
             href="/login"
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium"
+            className="inline-block bg-nytti-pink hover:bg-nytti-pink-dark text-white px-6 py-3 rounded-lg font-medium"
           >
             Sign In
           </Link>
@@ -287,7 +287,7 @@ export default function UploadPage() {
               onClick={() => setUploadType('vercel_url')}
               className={`flex-1 min-w-0 py-2 px-4 rounded ${
                 uploadType === 'vercel_url'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-nytti-pink text-white'
                   : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
               }`}
             >
@@ -297,7 +297,7 @@ export default function UploadPage() {
               onClick={() => setUploadType('file_upload')}
               className={`flex-1 min-w-0 py-2 px-4 rounded ${
                 uploadType === 'file_upload'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-nytti-pink text-white'
                   : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
               }`}
             >
@@ -307,7 +307,7 @@ export default function UploadPage() {
               onClick={() => setUploadType('external_link')}
               className={`flex-1 min-w-0 py-2 px-4 rounded ${
                 uploadType === 'external_link'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-nytti-pink text-white'
                   : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
               }`}
             >
@@ -378,7 +378,7 @@ export default function UploadPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md disabled:opacity-50"
+                className="w-full bg-nytti-pink hover:bg-nytti-pink-dark text-white py-2 px-4 rounded-md disabled:opacity-50"
               >
                 {loading ? 'Validating...' : 'Submit App'}
               </button>
@@ -433,7 +433,7 @@ export default function UploadPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md disabled:opacity-50"
+                className="w-full bg-nytti-pink hover:bg-nytti-pink-dark text-white py-2 px-4 rounded-md disabled:opacity-50"
               >
                 {loading ? 'Adding...' : 'Add Link'}
               </button>
@@ -497,7 +497,7 @@ export default function UploadPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md disabled:opacity-50"
+                className="w-full bg-nytti-pink hover:bg-nytti-pink-dark text-white py-2 px-4 rounded-md disabled:opacity-50"
               >
                 {loading ? 'Uploading...' : 'Upload App'}
               </button>

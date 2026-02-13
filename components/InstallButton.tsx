@@ -49,7 +49,7 @@ export default function InstallButton({ app }: InstallButtonProps) {
       <button
         onClick={handleInstall}
         disabled={installing}
-        className="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="w-full md:w-auto bg-nytti-pink hover:bg-nytti-pink-dark text-white font-semibold py-3 px-8 rounded-lg text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         {installing ? 'Opening...' : isExternalLink ? 'Open App' : '📱 Install App'}
       </button>

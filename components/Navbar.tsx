@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -46,14 +47,21 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white">
-              Nytti
+            <Link href="/" className="flex items-center h-10">
+              <Image
+                src="/brand/Nytti profil-1.png"
+                alt="Nytti"
+                width={120}
+                height={40}
+                className="h-10 w-auto object-contain"
+                priority
+              />
             </Link>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={() => setShowInstallModal(true)}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-semibold flex items-center gap-2 shrink-0"
+              className="bg-nytti-pink hover:bg-nytti-pink-dark text-white px-4 py-2 rounded-md text-sm font-semibold flex items-center gap-2 shrink-0"
             >
               <span>📲</span>
               <span className="hidden sm:inline">Last ned app</span>
@@ -108,7 +116,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/signup"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                  className="bg-nytti-pink hover:bg-nytti-pink-dark text-white px-4 py-2 rounded-md text-sm font-medium"
                 >
                   Registrer
                 </Link>
@@ -142,15 +150,15 @@ export default function Navbar() {
             {isIOS ? (
               <ol className="space-y-4 text-gray-600 dark:text-gray-300 text-sm">
                 <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center font-bold">1</span>
+                  <span className="flex-shrink-0 w-8 h-8 bg-nytti-pink/20 text-nytti-pink rounded-full flex items-center justify-center font-bold">1</span>
                   <span>Tap the <strong>Share</strong> button (□↑) at the bottom of Safari</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center font-bold">2</span>
+                  <span className="flex-shrink-0 w-8 h-8 bg-nytti-pink/20 text-nytti-pink rounded-full flex items-center justify-center font-bold">2</span>
                   <span>Tap <strong>Add to Home Screen</strong></span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center font-bold">3</span>
+                  <span className="flex-shrink-0 w-8 h-8 bg-nytti-pink/20 text-nytti-pink rounded-full flex items-center justify-center font-bold">3</span>
                   <span>Tap <strong>Add</strong> in the top right</span>
                 </li>
               </ol>
@@ -161,7 +169,7 @@ export default function Navbar() {
             )}
             <button
               onClick={() => setShowInstallModal(false)}
-              className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg"
+              className="w-full mt-6 bg-nytti-pink hover:bg-nytti-pink-dark text-white font-semibold py-3 rounded-lg"
             >
               Got it
             </button>

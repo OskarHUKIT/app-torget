@@ -71,7 +71,7 @@ export default async function ContentDetailPage({
               href={content.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg"
+              className="inline-block bg-nytti-pink hover:bg-nytti-pink-dark text-white font-semibold py-3 px-6 rounded-lg"
             >
               Åpne lenke
             </a>

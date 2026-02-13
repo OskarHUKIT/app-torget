@@ -27,7 +27,7 @@ export default async function ProfilePage() {
           </p>
           <Link
             href="/upload"
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium"
+            className="inline-block bg-nytti-pink hover:bg-nytti-pink-dark text-white px-6 py-3 rounded-lg font-medium"
           >
             Upload New App
           </Link>

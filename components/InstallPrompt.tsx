@@ -50,24 +50,24 @@ export default function InstallPrompt() {
   return (
     <>
       <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-sm z-50">
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl shadow-lg p-4 border border-blue-500/30">
+        <div className="bg-gradient-to-r from-nytti-pink to-nytti-pink-dark text-white rounded-xl shadow-lg p-4 border border-nytti-pink/30">
           <div className="flex items-start gap-3">
             <span className="text-3xl">📱</span>
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-sm">Få Nytti på iPhone</p>
-              <p className="text-xs text-blue-100 mt-0.5">
+              <p className="text-xs text-white/90 mt-0.5">
                 Add to home screen for quick access
               </p>
               <div className="flex gap-2 mt-3">
                 <button
                   onClick={handleInstall}
-                  className="flex-1 bg-white text-blue-600 font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-50 transition-colors"
+                  className="flex-1 bg-white text-nytti-pink font-semibold py-2 px-4 rounded-lg text-sm hover:bg-white/90 transition-colors"
                 >
                   Add to iPhone
                 </button>
                 <button
                   onClick={handleDismiss}
-                  className="px-3 py-2 text-blue-100 hover:text-white text-sm"
+                  className="px-3 py-2 text-white/80 hover:text-white text-sm"
                   aria-label="Dismiss"
                 >
                   Not now
@@ -102,19 +102,19 @@ export default function InstallPrompt() {
             {isIOS ? (
               <ol className="space-y-4 text-gray-600 dark:text-gray-300 text-sm">
                 <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center font-bold">
+                  <span className="flex-shrink-0 w-8 h-8 bg-nytti-pink/20 text-nytti-pink rounded-full flex items-center justify-center font-bold">
                     1
                   </span>
                   <span>Tap the <strong>Share</strong> button at the bottom of Safari (the square with arrow pointing up)</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center font-bold">
+                  <span className="flex-shrink-0 w-8 h-8 bg-nytti-pink/20 text-nytti-pink rounded-full flex items-center justify-center font-bold">
                     2
                   </span>
                   <span>Scroll down and tap <strong>Add to Home Screen</strong></span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center font-bold">
+                  <span className="flex-shrink-0 w-8 h-8 bg-nytti-pink/20 text-nytti-pink rounded-full flex items-center justify-center font-bold">
                     3
                   </span>
                   <span>Tap <strong>Add</strong> in the top right</span>
@@ -130,7 +130,7 @@ export default function InstallPrompt() {
                 setShowInstructions(false);
                 handleDismiss();
               }}
-              className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg"
+              className="w-full mt-6 bg-nytti-pink hover:bg-nytti-pink-dark text-white font-semibold py-3 rounded-lg"
             >
               Got it
             </button>

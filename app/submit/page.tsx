@@ -91,7 +91,7 @@ export default function SubmitContentPage() {
                 onClick={() => setContentType(t)}
                 className={`flex-1 py-2 px-4 rounded ${
                   contentType === t
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-nytti-pink text-white'
                     : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                 }`}
               >
@@ -190,7 +190,7 @@ export default function SubmitContentPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-medium disabled:opacity-50"
+              className="w-full bg-nytti-pink hover:bg-nytti-pink-dark text-white py-3 rounded-md font-medium disabled:opacity-50"
             >
               {loading ? 'Sender inn...' : 'Send inn'}
             </button>
