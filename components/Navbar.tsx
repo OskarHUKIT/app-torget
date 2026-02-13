@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -43,33 +44,35 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+    <nav className="sticky top-0 z-40 bg-background/80 dark:bg-background/80 backdrop-blur-xl border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center h-10">
+            <Link href="/" className="flex items-center h-10 group">
               <Image
                 src="/brand/Nytti profil-1.png"
                 alt="Nytti"
                 width={120}
                 height={40}
-                className="h-10 w-auto object-contain"
+                className="h-10 w-auto object-contain transition-opacity group-hover:opacity-90"
                 priority
               />
             </Link>
           </div>
-          <div className="flex items-center gap-2 sm:gap-4">
-            <button
+          <div className="flex items-center gap-2 sm:gap-3">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setShowInstallModal(true)}
-              className="bg-nytti-pink hover:bg-nytti-pink-dark text-white px-4 py-2 rounded-md text-sm font-semibold flex items-center gap-2 shrink-0"
+              className="flex items-center gap-2 rounded-xl bg-nytti-pink hover:bg-nytti-pink-dark text-white px-4 py-2.5 text-sm font-semibold shrink-0"
             >
-              <span>📲</span>
+              <span aria-hidden>📲</span>
               <span className="hidden sm:inline">Last ned app</span>
               <span className="sm:hidden">Last ned</span>
-            </button>
+            </motion.button>
             <Link
               href="/"
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+              className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
             >
               Feed
             </Link>
@@ -77,31 +80,31 @@ export default function Navbar() {
               <>
                 <Link
                   href="/upload"
-                  className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
-                  Last opp app
+                  Last opp
                 </Link>
                 <Link
                   href="/submit"
-                  className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   Send inn
                 </Link>
                 <Link
                   href="/curator"
-                  className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   Kurator
                 </Link>
                 <Link
                   href="/profile"
-                  className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   Profil
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   Logg ut
                 </button>
@@ -110,13 +113,13 @@ export default function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   Logg inn
                 </Link>
                 <Link
                   href="/signup"
-                  className="bg-nytti-pink hover:bg-nytti-pink-dark text-white px-4 py-2 rounded-md text-sm font-medium"
+                  className="rounded-xl bg-nytti-pink hover:bg-nytti-pink-dark text-white px-4 py-2.5 text-sm font-semibold"
                 >
                   Registrer
                 </Link>
@@ -128,27 +131,27 @@ export default function Navbar() {
 
       {showInstallModal && (
         <div
-          className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center p-0 sm:p-4"
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-0 sm:p-4 backdrop-blur-sm"
           onClick={() => setShowInstallModal(false)}
         >
           <div
-            className="bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl max-w-md w-full p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+            className="rounded-t-2xl sm:rounded-2xl max-w-md w-full p-6 shadow-xl max-h-[90vh] overflow-y-auto bg-surface border border-border"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                Add Nytti to Your Phone
+              <h3 className="font-display text-lg font-bold text-foreground">
+                Legg Nytti til telefonen
               </h3>
               <button
                 onClick={() => setShowInstallModal(false)}
-                className="text-gray-500 hover:text-gray-700 text-2xl leading-none w-8 h-8"
-                aria-label="Close"
+                className="text-muted hover:text-foreground text-2xl leading-none w-8 h-8 transition-colors"
+                aria-label="Lukk"
               >
                 ×
               </button>
             </div>
             {isIOS ? (
-              <ol className="space-y-4 text-gray-600 dark:text-gray-300 text-sm">
+              <ol className="space-y-4 text-muted text-sm">
                 <li className="flex gap-3">
                   <span className="flex-shrink-0 w-8 h-8 bg-nytti-pink/20 text-nytti-pink rounded-full flex items-center justify-center font-bold">1</span>
                   <span>Tap the <strong>Share</strong> button (□↑) at the bottom of Safari</span>
@@ -163,15 +166,15 @@ export default function Navbar() {
                 </li>
               </ol>
             ) : (
-              <p className="text-gray-600 dark:text-gray-300 text-sm">
-                Tap the menu (⋮) in your browser and look for <strong>Install app</strong> or <strong>Add to Home screen</strong>.
+              <p className="text-muted text-sm">
+                Trykk på menyen (⋮) i nettleseren og Finn <strong>Installer app</strong> eller <strong>Legg til på startsiden</strong>.
               </p>
             )}
             <button
               onClick={() => setShowInstallModal(false)}
-              className="w-full mt-6 bg-nytti-pink hover:bg-nytti-pink-dark text-white font-semibold py-3 rounded-lg"
+              className="mt-6 w-full rounded-xl bg-nytti-pink hover:bg-nytti-pink-dark py-3 font-semibold text-white"
             >
-              Got it
+              Har forstått
             </button>
           </div>
         </div>

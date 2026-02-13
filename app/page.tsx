@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import ContentCard from '@/components/ContentCard';
 import Link from 'next/link';
-
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
@@ -72,28 +71,42 @@ export default async function Home() {
     console.error('Error fetching feed:', err);
   }
 
-  return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-              Nytti
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              Kultur og samfunnsnyttig innhold for Norge
-            </p>
-          </div>
-          <Link
-            href="/upload"
-            className="bg-nytti-pink hover:bg-nytti-pink-dark text-white px-6 py-3 rounded-lg font-medium shrink-0"
-          >
-            Last opp
-          </Link>
-        </div>
+  const featured = content.filter((c) => c.is_curator_pick).slice(0, 3);
+  const rest = content.filter((c) => !c.is_curator_pick || !featured.some((f) => f.id === c.id));
+  // If no curator picks, take first 3 as featured
+  const featuredItems = featured.length > 0 ? featured : content.slice(0, 3);
+  const restItems = featured.length > 0 ? rest : content.slice(3);
 
+  return (
+    <main className="min-h-screen bg-background">
+      {/* Hero */}
+      <section className="relative overflow-hidden border-b border-border/60">
+        <div className="absolute inset-0 bg-gradient-to-br from-nytti-pink/5 via-transparent to-transparent" />
+        <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-nytti-pink/10 blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <div>
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight">
+                Nytti
+              </h1>
+              <p className="mt-3 font-body text-lg sm:text-xl text-muted max-w-lg">
+                Kultur og samfunnsnyttig innhold for Norge – dikt, kunstverk, apper og spill.
+              </p>
+            </div>
+            <Link
+              href="/upload"
+              className="inline-flex shrink-0 items-center justify-center gap-2 bg-nytti-pink hover:bg-nytti-pink-dark text-white px-6 py-3.5 rounded-xl font-semibold shadow-card hover:shadow-card-hover transition-all duration-200 active:scale-[0.98]"
+            >
+              <span>Last opp</span>
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {error ? (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded mb-4">
+          <div className="rounded-2xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-6 py-4">
             <p className="font-semibold mb-2">Feil ved lasting:</p>
             <p>{error.message}</p>
             <p className="text-sm mt-2">
@@ -101,26 +114,44 @@ export default async function Home() {
             </p>
           </div>
         ) : content.length === 0 ? (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-12 text-center">
-            <p className="text-gray-500 dark:text-gray-400 mb-4 text-lg">
-              Ingen innhold ennå
-            </p>
-            <p className="text-gray-400 dark:text-gray-500 mb-6">
-              Vær den første som laster opp innhold til Nytti!
-            </p>
+          <div className="rounded-2xl bg-surface border border-border p-12 text-center shadow-card">
+            <p className="font-display text-xl text-foreground mb-4">Ingen innhold ennå</p>
+            <p className="text-muted mb-6">Vær den første som laster opp innhold til Nytti!</p>
             <Link
               href="/upload"
-              className="inline-block bg-nytti-pink hover:bg-nytti-pink-dark text-white px-6 py-3 rounded-lg font-medium"
+              className="inline-flex bg-nytti-pink hover:bg-nytti-pink-dark text-white px-6 py-3 rounded-xl font-semibold"
             >
               Last opp innhold
             </Link>
           </div>
         ) : (
-          <div className="space-y-4">
-            {content.map((item) => (
-              <ContentCard key={item.id} content={item} />
-            ))}
-          </div>
+          <>
+            {/* Featured section */}
+            {featuredItems.length > 0 && (
+              <section className="mb-14">
+                <h2 className="font-display text-2xl sm:text-3xl font-semibold text-foreground mb-6">
+                  Kurators utvalg
+                </h2>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {featuredItems.map((item, i) => (
+                    <ContentCard key={item.id} content={item} index={i} featured />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Rest of feed */}
+            <section>
+              <h2 className="font-display text-xl sm:text-2xl font-semibold text-foreground mb-6">
+                Alt innhold
+              </h2>
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-2">
+                {restItems.map((item, i) => (
+                  <ContentCard key={item.id} content={item} index={featuredItems.length + i} />
+                ))}
+              </div>
+            </section>
+          </>
         )}
       </div>
     </main>

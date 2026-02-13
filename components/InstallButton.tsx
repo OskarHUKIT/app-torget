@@ -49,14 +49,14 @@ export default function InstallButton({ app }: InstallButtonProps) {
       <button
         onClick={handleInstall}
         disabled={installing}
-        className="w-full md:w-auto bg-nytti-pink hover:bg-nytti-pink-dark text-white font-semibold py-3 px-8 rounded-lg text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="w-full rounded-xl bg-nytti-pink px-8 py-3.5 text-lg font-semibold text-white transition-colors hover:bg-nytti-pink-dark disabled:cursor-not-allowed disabled:opacity-50 md:w-auto"
       >
-        {installing ? 'Opening...' : isExternalLink ? 'Open App' : '📱 Install App'}
+        {installing ? 'Åpner...' : isExternalLink ? 'Åpne app' : '📱 Installer app'}
       </button>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+      <p className="mt-3 text-sm text-muted">
         {isExternalLink
-          ? 'Opens the app in a new tab. You can bookmark it or add a shortcut to your home screen.'
-          : 'Click to open the app. Then use your browser\'s "Add to Home Screen" option to install it.'}
+          ? 'Åpner appen i en ny fane. Du kan legge den til på startsiden.'
+          : 'Klikk for å åpne appen. Bruk nettleserens «Legg til på startsiden» for å installere.'}
       </p>
     </div>
   );
