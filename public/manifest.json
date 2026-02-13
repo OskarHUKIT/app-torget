@@ -1,7 +1,7 @@
 {
-  "name": "App Torget",
-  "short_name": "App Torget",
-  "description": "Discover and install web applications directly to your phone",
+  "name": "Nytti",
+  "short_name": "Nytti",
+  "description": "Kultur og samfunnsnyttig innhold for Norge",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

@@ -41,7 +41,7 @@ function LoginForm() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
       <div className="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
         <div>
-          <h2 className="text-3xl font-bold text-center">Sign in to App Torget</h2>
+          <h2 className="text-3xl font-bold text-center">Logg inn på Nytti</h2>
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
             Or{' '}
             <Link href="/signup" className="font-medium text-blue-600 hover:text-blue-500">

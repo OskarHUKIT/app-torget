@@ -14,7 +14,7 @@ export default function InstallPrompt() {
     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const isStandaloneMode = (window as any).navigator?.standalone === true;
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const dismissed = localStorage.getItem('app-torget-install-dismissed');
+    const dismissed = localStorage.getItem('nytti-install-dismissed');
 
     setIsIOS(isIOSDevice);
     setIsStandalone(isStandaloneMode);
@@ -42,7 +42,7 @@ export default function InstallPrompt() {
   const handleDismiss = () => {
     setShow(false);
     setShowInstructions(false);
-    localStorage.setItem('app-torget-install-dismissed', 'true');
+    localStorage.setItem('nytti-install-dismissed', 'true');
   };
 
   if (!show) return null;
@@ -54,7 +54,7 @@ export default function InstallPrompt() {
           <div className="flex items-start gap-3">
             <span className="text-3xl">📱</span>
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-sm">Get App Torget on your iPhone</p>
+              <p className="font-semibold text-sm">Få Nytti på iPhone</p>
               <p className="text-xs text-blue-100 mt-0.5">
                 Add to home screen for quick access
               </p>
@@ -89,7 +89,7 @@ export default function InstallPrompt() {
           >
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                Add App Torget to Home Screen
+                Legg til Nytti på hjemskjerm
               </h3>
               <button
                 onClick={() => setShowInstructions(false)}

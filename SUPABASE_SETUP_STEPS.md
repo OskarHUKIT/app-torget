@@ -65,6 +65,19 @@ If you already ran `001_initial_schema.sql` and want to support "Add Link" (exte
 3. Run it
 4. This adds the `external_link` upload type and makes `manifest_url` nullable
 
+### Additional Migration: Nytti Content Feed (003)
+
+For the Nytti feed (content table, engagement, profiles):
+
+1. Open `supabase/migrations/003_nytti_content_feed.sql`
+2. Copy all contents and paste into SQL Editor
+3. Run it
+4. This creates `content`, `user_engagement`, `profiles` tables and syncs approved apps to the feed
+
+### EU Data Residency (Important for Nytti)
+
+**When creating your Supabase project**, choose an EU region (e.g. Frankfurt or Stockholm) so all data stays in Europe. Existing projects cannot be migrated to a different region—create a new project in EU if needed.
+
 ### Option B: Using Table Editor (Alternative - Manual)
 
 If SQL Editor doesn't work, you can create tables manually:

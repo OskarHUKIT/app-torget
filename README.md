@@ -1,96 +1,60 @@
-# App Torget
+# Nytti
 
-A Progressive Web App marketplace where users can upload, discover, and install web applications directly to their phones.
+En plattform for kultur og samfunnsnyttig innhold – dikt, kunstverk,apper og spill for voksne i Norge. Alt innhold er kuratert for å være samfunnsnyttig.
 
-## Features
+## Funksjoner
 
-- 📱 Install App Torget as a PWA on your phone
-- 🔍 Browse and discover web applications
-- ⬆️ Upload apps via Vercel URL or file upload (GitHub/ZIP/direct)
-- 📥 One-click installation of apps as PWAs
-- 🔄 Offline support for installed apps
-- 👤 User authentication and profiles
+- Utforsk et feed med dikt, kunstverk, apper og spill
+- Last opp innhold (apper, spill, dikt, kunstverk)
+- Personlig feed basert på likes og interesse
+- Kurator-godkjent innhold
+- Alle data lagres i EU (GDPR)
 
-## Tech Stack
+## Teknologi
 
 - **Frontend**: Next.js 14 (App Router) + TypeScript
-- **Backend**: Supabase (PostgreSQL, Auth, Storage)
-- **Deployment**: Vercel
+- **Backend**: Supabase (PostgreSQL, Auth, Storage) – må være EU-region
+- **Deploy**: Vercel – funksjoner i EU (fra1)
 - **Styling**: Tailwind CSS
 
-## Setup
+## Oppsett
 
-### 1. Install Dependencies
+### 1. Installer avhengigheter
 
 ```bash
 npm install
 ```
 
-### 2. Configure Environment Variables
+### 2. Miljøvariabler
 
-Create a `.env.local` file in the root directory:
+Opprett `.env.local`:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-GITHUB_TOKEN=your_github_token (optional)
+NEXT_PUBLIC_SUPABASE_URL=din_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=din_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=service_role_key
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-### 3. Set Up Supabase
+### 3. Supabase (EU-region)
 
-1. Create a Supabase project at [supabase.com](https://supabase.com)
-2. Create a Storage bucket named `apps` (set to Public)
-3. Run the database migration from `supabase/migrations/001_initial_schema.sql` in the SQL Editor
+1. Opprett Supabase-prosjekt på [supabase.com](https://supabase.com)
+2. **Viktig:** Velg EU-region (f.eks. Frankfurt eller Stockholm)
+3. Kjør migrasjoner fra `supabase/migrations/` i SQL Editor
+4. Opprett Storage-bucket `apps` (Public)
 
-See [SETUP_GUIDE.md](./SETUP_GUIDE.md) for detailed instructions.
-
-### 4. Run Development Server
+### 4. Kjør utviklingsserver
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Åpne [http://localhost:3000](http://localhost:3000).
 
-## Project Structure
+## EU-data
 
-```
-app-torget/
-├── app/                    # Next.js app router pages
-│   ├── (auth)/            # Authentication pages
-│   ├── app/[id]/          # App detail pages
-│   ├── upload/            # Upload page
-│   └── profile/           # User profile
-├── components/            # React components
-├── lib/                   # Utility functions
-│   ├── supabase/         # Supabase clients
-│   ├── storage.ts         # Storage helpers
-│   └── app-validator.ts   # PWA validation
-├── supabase/             # Supabase migrations
-└── public/               # Static assets and PWA files
-```
+Alle data lagres og prosesseres i Europa. Se planen for konfigurasjon av Supabase (EU-region) og Vercel (funksjonsregion fra1).
 
-## Usage
-
-### Uploading Apps
-
-1. **Vercel URL Method**: Provide a URL to an already-deployed PWA
-2. **File Upload Method**: Upload files directly (must include manifest.json)
-
-### Installing Apps
-
-1. Browse apps on the homepage
-2. Click on an app to view details
-3. Click "Install App" button
-4. The app opens in a new window
-5. Use your browser's "Add to Home Screen" option to install as PWA
-
-## Deployment
-
-See [SETUP_GUIDE.md](./SETUP_GUIDE.md) for Vercel deployment instructions.
-
-## License
+## Lisens
 
 MIT

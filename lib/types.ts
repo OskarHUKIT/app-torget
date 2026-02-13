@@ -31,6 +31,29 @@ export interface UserFavorite {
   created_at: string;
 }
 
+export type ContentType = 'app' | 'game' | 'poem' | 'artwork' | 'idea';
+
+export interface Content {
+  id: string;
+  type: ContentType;
+  title: string;
+  description: string | null;
+  author_id: string | null;
+  app_id: string | null;
+  url: string | null;
+  image_url: string | null;
+  body_text: string | null;
+  metadata: Record<string, unknown>;
+  category: string | null;
+  tags: string[];
+  region: string | null;
+  created_at: string;
+  updated_at: string;
+  status: string;
+  curator_notes: string | null;
+  is_curator_pick: boolean;
+}
+
 export interface PWAManifest {
   name: string;
   short_name?: string;

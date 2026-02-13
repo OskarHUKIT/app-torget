@@ -47,7 +47,7 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white">
-              App Torget
+              Nytti
             </Link>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
@@ -56,14 +56,14 @@ export default function Navbar() {
               className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-semibold flex items-center gap-2 shrink-0"
             >
               <span>📲</span>
-              <span className="hidden sm:inline">Download App</span>
-              <span className="sm:hidden">Download</span>
+              <span className="hidden sm:inline">Last ned app</span>
+              <span className="sm:hidden">Last ned</span>
             </button>
             <Link
               href="/"
               className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
             >
-              Browse
+              Feed
             </Link>
             {user ? (
               <>
@@ -71,19 +71,31 @@ export default function Navbar() {
                   href="/upload"
                   className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  Upload App
+                  Last opp app
+                </Link>
+                <Link
+                  href="/submit"
+                  className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Send inn
+                </Link>
+                <Link
+                  href="/curator"
+                  className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Kurator
                 </Link>
                 <Link
                   href="/profile"
                   className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  Profile
+                  Profil
                 </Link>
                 <button
                   onClick={handleSignOut}
                   className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  Sign Out
+                  Logg ut
                 </button>
               </>
             ) : (
@@ -92,13 +104,13 @@ export default function Navbar() {
                   href="/login"
                   className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  Sign In
+                  Logg inn
                 </Link>
                 <Link
                   href="/signup"
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium"
                 >
-                  Sign Up
+                  Registrer
                 </Link>
               </>
             )}
@@ -117,7 +129,7 @@ export default function Navbar() {
           >
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                Add App Torget to Your Phone
+                Add Nytti to Your Phone
               </h3>
               <button
                 onClick={() => setShowInstallModal(false)}
