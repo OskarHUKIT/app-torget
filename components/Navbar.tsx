@@ -1,18 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
+import Logo from './Logo';
 import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import ProfileMenu from './ProfileMenu';
 
 export default function Navbar() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showInstallModal, setShowInstallModal] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
-  const router = useRouter();
   const supabase = createClient();
 
   useEffect(() => {
@@ -22,163 +21,108 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    const handler = () => setShowInstallModal(true);
+    window.addEventListener('nytti-open-install', handler);
+    return () => window.removeEventListener('nytti-open-install', handler);
+  }, []);
+
+  useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
       setLoading(false);
     };
-
     getUser();
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
-
     return () => subscription.unsubscribe();
   }, [supabase]);
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push('/');
-    router.refresh();
-  };
-
   return (
-    <nav className="sticky top-0 z-40 bg-background/80 dark:bg-background/80 backdrop-blur-xl border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center h-10 group">
-              <Image
-                src="/brand/Nytti profil-1.png"
-                alt="Nytti"
-                width={120}
-                height={40}
-                className="h-10 w-auto object-contain transition-opacity group-hover:opacity-90"
-                priority
-              />
+    <>
+      {/* Desktop nav - #EF5B99 header */}
+      <nav className="sticky top-0 z-40 hidden border-b border-[#EF5B99]/20 bg-[#EF5B99] md:block">
+        <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+          <div className="flex items-center gap-1">
+            <Link href="/browse" className="rounded-lg px-3 py-2 text-sm font-medium text-white/90 transition-colors hover:bg-white/15">
+              Bibliotek
+            </Link>
+            <Link href="/dugnader" className="rounded-lg px-3 py-2 text-sm font-medium text-white/90 transition-colors hover:bg-white/15">
+              Dugnader
             </Link>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3">
+
+          <Link href="/" className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center">
+            <Logo className="h-[60px] w-auto" />
+          </Link>
+
+          <div className="flex items-center gap-3">
+            <Link href="/upload" className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#EF5B99] transition-colors hover:bg-white/90">
+              Del
+            </Link>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setShowInstallModal(true)}
-              className="flex items-center gap-2 rounded-xl bg-nytti-pink hover:bg-nytti-pink-dark text-white px-4 py-2.5 text-sm font-semibold shrink-0"
+              className="rounded-lg border border-white/50 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-white/15"
             >
-              <span aria-hidden>📲</span>
-              <span className="hidden sm:inline">Last ned app</span>
-              <span className="sm:hidden">Last ned</span>
+              Last ned
             </motion.button>
-            <Link
-              href="/"
-              className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-            >
-              Feed
-            </Link>
-            {user ? (
-              <>
-                <Link
-                  href="/upload"
-                  className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                >
-                  Last opp
-                </Link>
-                <Link
-                  href="/submit"
-                  className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                >
-                  Send inn
-                </Link>
-                <Link
-                  href="/curator"
-                  className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                >
-                  Kurator
-                </Link>
-                <Link
-                  href="/profile"
-                  className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                >
-                  Profil
-                </Link>
-                <button
-                  onClick={handleSignOut}
-                  className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                >
-                  Logg ut
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="text-foreground/80 hover:text-foreground px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                >
-                  Logg inn
-                </Link>
-                <Link
-                  href="/signup"
-                  className="rounded-xl bg-nytti-pink hover:bg-nytti-pink-dark text-white px-4 py-2.5 text-sm font-semibold"
-                >
-                  Registrer
-                </Link>
-              </>
-            )}
+            <ProfileMenu user={user} variant="desktop" />
           </div>
         </div>
-      </div>
+      </nav>
 
+      {/* Install modal */}
       {showInstallModal && (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-0 sm:p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 p-0 sm:p-4 backdrop-blur-sm"
           onClick={() => setShowInstallModal(false)}
         >
           <div
-            className="rounded-t-2xl sm:rounded-2xl max-w-md w-full p-6 shadow-xl max-h-[90vh] overflow-y-auto bg-surface border border-border"
+            className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-t-2xl border border-border bg-surface p-6 shadow-xl sm:rounded-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-display text-lg font-bold text-foreground">
-                Legg Nytti til telefonen
-              </h3>
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="font-display text-lg font-bold text-foreground">Legg Nytti til telefonen</h3>
               <button
                 onClick={() => setShowInstallModal(false)}
-                className="text-muted hover:text-foreground text-2xl leading-none w-8 h-8 transition-colors"
+                className="text-2xl leading-none text-muted transition-colors hover:text-foreground"
                 aria-label="Lukk"
               >
                 ×
               </button>
             </div>
             {isIOS ? (
-              <ol className="space-y-4 text-muted text-sm">
+              <ol className="space-y-4 text-sm text-muted">
                 <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-8 h-8 bg-nytti-pink/20 text-nytti-pink rounded-full flex items-center justify-center font-bold">1</span>
-                  <span>Tap the <strong>Share</strong> button (□↑) at the bottom of Safari</span>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-nytti-pink/20 font-bold text-nytti-pink">1</span>
+                  <span>Trykk <strong>Del</strong> (□↑) nederst i Safari</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-8 h-8 bg-nytti-pink/20 text-nytti-pink rounded-full flex items-center justify-center font-bold">2</span>
-                  <span>Tap <strong>Add to Home Screen</strong></span>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-nytti-pink/20 font-bold text-nytti-pink">2</span>
+                  <span>Velg <strong>Legg til på startsiden</strong></span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-8 h-8 bg-nytti-pink/20 text-nytti-pink rounded-full flex items-center justify-center font-bold">3</span>
-                  <span>Tap <strong>Add</strong> in the top right</span>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-nytti-pink/20 font-bold text-nytti-pink">3</span>
+                  <span>Trykk <strong>Legg til</strong></span>
                 </li>
               </ol>
             ) : (
-              <p className="text-muted text-sm">
-                Trykk på menyen (⋮) i nettleseren og Finn <strong>Installer app</strong> eller <strong>Legg til på startsiden</strong>.
+              <p className="text-sm text-muted">
+                Trykk på menyen (⋮) i nettleseren og finn <strong>Installer app</strong> eller <strong>Legg til på startsiden</strong>.
               </p>
             )}
             <button
               onClick={() => setShowInstallModal(false)}
-              className="mt-6 w-full rounded-xl bg-nytti-pink hover:bg-nytti-pink-dark py-3 font-semibold text-white"
+              className="mt-6 w-full rounded-lg bg-nytti-pink py-3 font-semibold text-white hover:bg-nytti-pink-dark"
             >
               Har forstått
             </button>
           </div>
         </div>
       )}
-    </nav>
+    </>
   );
 }

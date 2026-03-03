@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 
 export default function SubmitContentPage() {
-  const [contentType, setContentType] = useState<'poem' | 'artwork' | 'idea'>('poem');
+  const [contentType, setContentType] = useState<'poem' | 'artwork' | 'idea' | 'article' | 'dugnad' | 'event'>('poem');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [bodyText, setBodyText] = useState('');
@@ -13,6 +13,15 @@ export default function SubmitContentPage() {
   const [url, setUrl] = useState('');
   const [category, setCategory] = useState('');
   const [tags, setTags] = useState('');
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
+  const [address, setAddress] = useState('');
+  const [locationName, setLocationName] = useState('');
+  const [startsAt, setStartsAt] = useState('');
+  const [endsAt, setEndsAt] = useState('');
+  const [capacity, setCapacity] = useState('');
+  const [organizer, setOrganizer] = useState('');
+  const [contact, setContact] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<any>(null);
@@ -51,6 +60,15 @@ export default function SubmitContentPage() {
           url: url.trim() || null,
           category: category.trim() || null,
           tags: tags ? tags.split(',').map((t) => t.trim()).filter(Boolean) : [],
+          latitude: latitude ? Number(latitude) : null,
+          longitude: longitude ? Number(longitude) : null,
+          address: address.trim() || null,
+          location_name: locationName.trim() || null,
+          starts_at: startsAt || null,
+          ends_at: endsAt || null,
+          capacity: capacity ? Number(capacity) : null,
+          organizer: organizer.trim() || null,
+          contact: contact.trim() || null,
           author_id: user.id,
           status: 'pending',
         })
@@ -85,7 +103,7 @@ export default function SubmitContentPage() {
 
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <div className="flex gap-2 mb-6">
-            {(['poem', 'artwork', 'idea'] as const).map((t) => (
+            {(['poem', 'artwork', 'idea', 'article', 'dugnad', 'event'] as const).map((t) => (
               <button
                 key={t}
                 onClick={() => setContentType(t)}
@@ -95,7 +113,17 @@ export default function SubmitContentPage() {
                     : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                 }`}
               >
-                {t === 'poem' ? 'Dikt' : t === 'artwork' ? 'Kunstverk' : 'Ide'}
+                {t === 'poem'
+                  ? 'Dikt'
+                  : t === 'artwork'
+                    ? 'Kunstverk'
+                    : t === 'idea'
+                      ? 'Ide'
+                      : t === 'article'
+                        ? 'Artikkel'
+                        : t === 'dugnad'
+                          ? 'Dugnad'
+                          : 'Event'}
               </button>
             ))}
           </div>
@@ -128,17 +156,23 @@ export default function SubmitContentPage() {
                 placeholder="Kort beskrivelse"
               />
             </div>
-            {(contentType === 'poem' || contentType === 'idea') && (
+            {(contentType === 'poem' || contentType === 'idea' || contentType === 'article') && (
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  {contentType === 'poem' ? 'Dikttekst' : 'Ide / tekst'}
+                  {contentType === 'poem' ? 'Dikttekst' : contentType === 'article' ? 'Artikkeltekst' : 'Ide / tekst'}
                 </label>
                 <textarea
                   value={bodyText}
                   onChange={(e) => setBodyText(e.target.value)}
                   rows={8}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700"
-                  placeholder={contentType === 'poem' ? 'Skriv diktet her...' : 'Beskriv ideen...'}
+                  placeholder={
+                    contentType === 'poem'
+                      ? 'Skriv diktet her...'
+                      : contentType === 'article'
+                        ? 'Skriv artikkelen her...'
+                        : 'Beskriv ideen...'
+                  }
                 />
               </div>
             )}
@@ -187,6 +221,101 @@ export default function SubmitContentPage() {
                 placeholder="dikt, natur, norsk"
               />
             </div>
+
+            {(contentType === 'dugnad' || contentType === 'event') && (
+              <div className="space-y-4 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+                <h3 className="font-semibold">Lokasjon og tidspunkt</h3>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">Stedsnavn</label>
+                    <input
+                      value={locationName}
+                      onChange={(e) => setLocationName(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 dark:border-gray-600 dark:bg-gray-700"
+                      placeholder="F.eks. Bygdøy"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">Adresse</label>
+                    <input
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 dark:border-gray-600 dark:bg-gray-700"
+                      placeholder="Gate, postnummer, sted"
+                    />
+                  </div>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">Latitude</label>
+                    <input
+                      value={latitude}
+                      onChange={(e) => setLatitude(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 dark:border-gray-600 dark:bg-gray-700"
+                      placeholder="59.9139"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">Longitude</label>
+                    <input
+                      value={longitude}
+                      onChange={(e) => setLongitude(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 dark:border-gray-600 dark:bg-gray-700"
+                      placeholder="10.7522"
+                    />
+                  </div>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">Starter</label>
+                    <input
+                      type="datetime-local"
+                      value={startsAt}
+                      onChange={(e) => setStartsAt(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 dark:border-gray-600 dark:bg-gray-700"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">Slutter</label>
+                    <input
+                      type="datetime-local"
+                      value={endsAt}
+                      onChange={(e) => setEndsAt(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 dark:border-gray-600 dark:bg-gray-700"
+                    />
+                  </div>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">Kapasitet</label>
+                    <input
+                      value={capacity}
+                      onChange={(e) => setCapacity(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 dark:border-gray-600 dark:bg-gray-700"
+                      placeholder="50"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">Arrangør</label>
+                    <input
+                      value={organizer}
+                      onChange={(e) => setOrganizer(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 dark:border-gray-600 dark:bg-gray-700"
+                      placeholder="Frivilligsentral"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">Kontakt</label>
+                    <input
+                      value={contact}
+                      onChange={(e) => setContact(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 dark:border-gray-600 dark:bg-gray-700"
+                      placeholder="epost eller telefon"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
             <button
               type="submit"
               disabled={loading}

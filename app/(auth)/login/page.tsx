@@ -28,82 +28,82 @@ function LoginForm() {
       if (error) throw error;
 
       const redirect = searchParams.get('redirect') || '/';
-      // Use full page navigation so cookies are sent before Next.js makes any requests
       window.location.href = redirect;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : 'En feil oppstod');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-      <div className="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-        <div>
-          <h2 className="text-3xl font-bold text-center">Logg inn på Nytti</h2>
-          <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
-            Or{' '}
-            <Link href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
-              create a new account
+    <div className="flex min-h-screen items-center justify-center bg-[#f5f5f5] px-4 dark:bg-[#0f0f12]">
+      <div className="w-full max-w-sm rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div className="text-center">
+          <h2 className="text-xl font-medium text-contrast dark:text-gray-200">
+            Logg inn på <span className="font-nytti text-2xl text-nytti-pink">Nytti</span>
+          </h2>
+          <p className="mt-2 text-sm text-muted">
+            Eller{' '}
+            <Link href="/signup" className="font-medium text-contrast hover:underline dark:text-[#6b6fb8]">
+              opprett konto
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
+
+        <form className="mt-6 space-y-4" onSubmit={handleLogin}>
           {checkEmailMessage && (
-            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded">
-              Check your email to confirm your account, then sign in below.
+            <div className="rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800 dark:border-green-800 dark:bg-green-900/20 dark:text-green-300">
+              Sjekk e-posten for å bekrefte kontoen, og logg inn nedenfor.
             </div>
           )}
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded">
+            <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300">
               {error}
             </div>
           )}
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="you@example.com"
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="••••••••"
-              />
-            </div>
+
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-contrast dark:text-gray-300">
+              E-post
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="mt-1.5 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-foreground placeholder:text-gray-400 focus:border-nytti-pink focus:outline-none focus:ring-1 focus:ring-nytti-pink dark:border-gray-700 dark:bg-gray-800 dark:placeholder:text-gray-500"
+              placeholder="deg@eksempel.no"
+            />
           </div>
 
           <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-nytti-pink hover:bg-nytti-pink-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nytti-pink disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Signing in...' : 'Sign in'}
-            </button>
+            <label htmlFor="password" className="block text-sm font-medium text-contrast dark:text-gray-300">
+              Passord
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-1.5 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-foreground placeholder:text-gray-400 focus:border-nytti-pink focus:outline-none focus:ring-1 focus:ring-nytti-pink dark:border-gray-700 dark:bg-gray-800 dark:placeholder:text-gray-500"
+              placeholder="••••••••"
+            />
           </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-nytti-pink py-3 text-sm font-semibold text-white transition-colors hover:bg-nytti-pink-dark disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {loading ? 'Logger inn...' : 'Logg inn'}
+          </button>
         </form>
       </div>
     </div>
@@ -112,7 +112,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center">Laster...</div>}>
       <LoginForm />
     </Suspense>
   );

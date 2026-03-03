@@ -1,6 +1,7 @@
 export type UploadType = 'vercel_url' | 'file_upload' | 'github' | 'external_link';
 
 export type AppStatus = 'pending' | 'approved' | 'rejected';
+export type ContentStatus = 'pending' | 'approved' | 'rejected';
 
 export interface App {
   id: string;
@@ -31,9 +32,24 @@ export interface UserFavorite {
   created_at: string;
 }
 
-export type ContentType = 'app' | 'game' | 'poem' | 'artwork' | 'idea';
+export type ContentType = 'app' | 'game' | 'poem' | 'artwork' | 'idea' | 'article' | 'dugnad' | 'event';
 
-export interface Content {
+export interface ContentGeo {
+  latitude?: number | null;
+  longitude?: number | null;
+  address?: string | null;
+  location_name?: string | null;
+}
+
+export interface ContentEventMeta {
+  starts_at?: string | null;
+  ends_at?: string | null;
+  capacity?: number | null;
+  organizer?: string | null;
+  contact?: string | null;
+}
+
+export interface Content extends ContentGeo, ContentEventMeta {
   id: string;
   type: ContentType;
   title: string;
@@ -49,7 +65,7 @@ export interface Content {
   region: string | null;
   created_at: string;
   updated_at: string;
-  status: string;
+  status: ContentStatus;
   curator_notes: string | null;
   is_curator_pick: boolean;
 }

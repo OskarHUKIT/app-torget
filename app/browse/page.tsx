@@ -1,19 +1,14 @@
 import { createClient } from '@/lib/supabase/server';
-import HomeFeedDynamic from '@/components/HomeFeedDynamic';
-import IntroShell from '@/components/IntroShell';
-import Logo from '@/components/Logo';
-import Link from 'next/link';
+import LibraryExplorer from '@/components/LibraryExplorer';
 import { PLACEHOLDER_FEED, type FeedItem } from '@/lib/mockFeed';
 
 export const dynamic = 'force-dynamic';
 
-interface HomeProps {
-  searchParams?: { intro?: string };
+interface BrowsePageProps {
+  searchParams?: { type?: string; q?: string };
 }
 
-export default async function Home({ searchParams }: HomeProps) {
-  const forceIntro = searchParams?.intro === '1';
-
+export default async function BrowsePage({ searchParams }: BrowsePageProps) {
   let content: FeedItem[] = [];
   let error: Error | null = null;
 
@@ -27,9 +22,8 @@ export default async function Home({ searchParams }: HomeProps) {
         .from('content')
         .select('*')
         .eq('status', 'approved')
-        .order('is_curator_pick', { ascending: false })
         .order('created_at', { ascending: false })
-        .limit(30);
+        .limit(50);
 
       if (result.data?.length) {
         content = result.data.map((c) => ({ ...c } as FeedItem));
@@ -39,7 +33,7 @@ export default async function Home({ searchParams }: HomeProps) {
           .select('*')
           .eq('status', 'approved')
           .order('created_at', { ascending: false })
-          .limit(20);
+          .limit(30);
         if (appsResult.data?.length) {
           content = appsResult.data.map((app: any) => ({
             id: app.id,
@@ -55,15 +49,6 @@ export default async function Home({ searchParams }: HomeProps) {
             category: app.category,
             tags: app.tags || [],
             region: null,
-            latitude: null,
-            longitude: null,
-            address: null,
-            location_name: null,
-            starts_at: null,
-            ends_at: null,
-            capacity: null,
-            organizer: null,
-            contact: null,
             created_at: app.created_at,
             updated_at: app.updated_at,
             status: 'approved',
@@ -83,7 +68,6 @@ export default async function Home({ searchParams }: HomeProps) {
     );
   }
 
-  // When no real content, show placeholders (mix of types; only 1 artwork with image)
   const mergedFeed: FeedItem[] =
     content.length > 0
       ? content
@@ -95,27 +79,18 @@ export default async function Home({ searchParams }: HomeProps) {
   mergedFeed.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
   return (
-    <IntroShell forceIntro={forceIntro}>
-      <main className="relative min-h-screen pb-24 md:pb-0">
-        {/* Feed header - mobile only, centered logo */}
-        <header className="sticky top-0 z-30 flex items-center justify-center border-b border-[#EF5B99]/20 bg-[#EF5B99] md:hidden">
-          <Link href="/" className="flex py-3">
-            <Logo className="h-[60px] w-auto" />
-          </Link>
-        </header>
-
-        {error && mergedFeed.length > 0 && (
-          <div className="mx-auto mt-4 max-w-6xl rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-200">
-            Kunne ikke koble til databasen – viser eksempelinnhold
-          </div>
-        )}
-        {error && mergedFeed.length === 0 && (
-          <div className="mx-auto mt-4 max-w-6xl rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300">
-            {error.message}
-          </div>
-        )}
-        <HomeFeedDynamic items={mergedFeed} />
-      </main>
-    </IntroShell>
+    <main className="relative min-h-screen pb-24 md:pb-0">
+      {error && mergedFeed.length > 0 && (
+        <div className="mx-auto mt-4 max-w-6xl rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-200">
+          Viser eksempelinnhold
+        </div>
+      )}
+      {error && mergedFeed.length === 0 && (
+        <div className="mx-auto mt-4 max-w-6xl rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300">
+          {error.message}
+        </div>
+      )}
+      <LibraryExplorer items={mergedFeed} initialType={searchParams?.type} initialQuery={searchParams?.q} />
+    </main>
   );
 }

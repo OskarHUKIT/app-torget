@@ -1,31 +1,43 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Satisfy&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Coquette-like branding: Satisfy for "Nytti" (Coquette requires license from Adobe/FontSpring) */
 :root {
-  --background: #faf8f5;
-  --foreground: #1a1614;
+  --font-nytti: 'Satisfy', 'Coquette', cursive;
+  --background: #fef7fb;
+  --foreground: #1a0a12;
+  --contrast: #33367a;
   --card: #ffffff;
-  --card-hover: #fdfcfa;
-  --muted: #6b6560;
-  --border: #e8e4df;
+  --card-hover: #fff5f9;
+  --muted: #6b4a5a;
+  --border: #f0dce5;
   --nytti: #E93B8A;
-  --nytti-dark: #D42A7A;
-  --accent-warm: #d4a574;
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'DM Sans', system-ui, sans-serif;
+  --nytti-dark: #C41E6B;
+  --nytti-light: #ff5aa3;
+  --nytti-glow: rgba(233, 59, 138, 0.4);
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Outfit', system-ui, sans-serif;
+}
+
+.font-nytti {
+  font-family: var(--font-nytti);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0f0d0b;
-    --foreground: #f5f0ea;
-    --card: #1a1714;
-    --card-hover: #221f1b;
-    --muted: #a39e97;
-    --border: #2d2925;
+    --contrast: #6b6fb8;
+    --background: #120810;
+    --foreground: #fef0f7;
+    --card: #1a0f16;
+    --card-hover: #24151c;
+    --muted: #c4a4b4;
+    --border: #2d1a24;
+    --nytti: #ff5aa3;
+    --nytti-dark: #E93B8A;
+    --nytti-light: #ff8dc4;
   }
 }
 
@@ -51,21 +63,45 @@ h1, h2, h3, .font-display {
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-  .animate-in {
-    animation: fadeSlideUp 0.5s ease-out forwards;
+  .text-balance { text-wrap: balance; }
+  .gradient-nytti { background: linear-gradient(135deg, var(--nytti) 0%, var(--nytti-dark) 100%); }
+  .gradient-nytti-subtle { background: linear-gradient(135deg, var(--nytti) 0%, var(--nytti-light) 50%, var(--nytti) 100%); }
+  .shadow-nytti { box-shadow: 0 4px 24px var(--nytti-glow); }
+  .animate-in { animation: fadeSlideUp 0.5s ease-out forwards; }
+  .glass-card {
+    background: color-mix(in srgb, var(--card) 82%, transparent);
+    backdrop-filter: blur(10px);
   }
 }
 
 @keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-nytti {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.float-soft {
+  animation: float-soft 3s ease-in-out infinite;
+}
+
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

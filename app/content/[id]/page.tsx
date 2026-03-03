@@ -3,48 +3,54 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import InstallButton from '@/components/InstallButton';
+import { PLACEHOLDER_FEED } from '@/lib/mockFeed';
+import { MEDIA_LABELS, formatMediumDate } from '@/lib/content-utils';
 
 export default async function ContentDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const supabase = await createClient();
+  let content: any = null;
 
-  const { data: content, error } = await supabase
-    .from('content')
-    .select('*')
-    .eq('id', params.id)
-    .single();
-
-  if (error || !content || content.status !== 'approved') {
-    notFound();
+  let supabase = null;
+  if (params.id.startsWith('placeholder-')) {
+    content = PLACEHOLDER_FEED.find((p) => p.id === params.id) ?? null;
+    if (!content) notFound();
+  } else {
+    supabase = await createClient();
+    const { data, error } = await supabase
+      .from('content')
+      .select('*')
+      .eq('id', params.id)
+      .single();
+    if (error || !data || data.status !== 'approved') notFound();
+    content = data;
   }
 
   let app = null;
-  if (content.type === 'app' && content.app_id) {
+  if (content.type === 'app' && content.app_id && !content.is_placeholder && supabase) {
     const { data } = await supabase.from('apps').select('*').eq('id', content.app_id).single();
     app = data;
   }
 
-  const typeLabels: Record<string, string> = {
-    app: 'App',
-    game: 'Spill',
-    poem: 'Dikt',
-    artwork: 'Kunstverk',
-    idea: 'Ide',
-  };
-
   const isApp = content.type === 'app' && app;
+  const isPlaceholder = content.is_placeholder;
+  const contentTypeKey = content.type as keyof typeof MEDIA_LABELS;
 
   return (
-    <main className="min-h-screen bg-background">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <article className="rounded-2xl bg-surface border border-border shadow-card overflow-hidden">
+    <main className="min-h-screen bg-background pb-20 md:pb-0">
+      <div className="mx-auto max-w-2xl px-4 py-8">
+        {isPlaceholder && (
+          <div className="mb-4 rounded-2xl border border-nytti-pink/30 bg-nytti-pink/10 px-4 py-3 text-center text-sm font-medium text-nytti-pink">
+            ✨ Dette er eksempelinnhold for å vise feed-layouten
+          </div>
+        )}
+        <article className="overflow-hidden rounded-2xl border border-border bg-surface shadow-card">
           <div className="p-8 sm:p-10">
             <div className="mb-6 flex items-center gap-2">
               <span className="text-xs font-medium uppercase tracking-widest text-muted">
-                {typeLabels[content.type] || content.type}
+                {MEDIA_LABELS[contentTypeKey] || content.type}
               </span>
               {content.is_curator_pick && (
                 <span className="rounded-full bg-nytti-pink/15 px-2.5 py-0.5 text-xs font-medium text-nytti-pink">
@@ -74,13 +80,32 @@ export default async function ContentDetailPage({
                 {content.body_text}
               </div>
             )}
+            {(content.type === 'dugnad' || content.type === 'event') && (
+              <div className="mb-6 grid gap-3 rounded-xl border border-border bg-background/60 p-4 text-sm">
+                {content.location_name && (
+                  <p className="text-foreground"><span className="font-semibold">Sted:</span> {content.location_name}</p>
+                )}
+                {content.address && (
+                  <p className="text-muted"><span className="font-semibold text-foreground">Adresse:</span> {content.address}</p>
+                )}
+                {formatMediumDate(content.starts_at) && (
+                  <p className="text-muted"><span className="font-semibold text-foreground">Starter:</span> {formatMediumDate(content.starts_at)}</p>
+                )}
+                {formatMediumDate(content.ends_at) && (
+                  <p className="text-muted"><span className="font-semibold text-foreground">Slutter:</span> {formatMediumDate(content.ends_at)}</p>
+                )}
+                {content.organizer && (
+                  <p className="text-muted"><span className="font-semibold text-foreground">Arrangør:</span> {content.organizer}</p>
+                )}
+              </div>
+            )}
             <div className="flex flex-wrap gap-3">
-              {content.url && !isApp && (
+              {content.url && !isApp && !isPlaceholder && (
                 <a
                   href={content.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl bg-nytti-pink hover:bg-nytti-pink-dark text-white font-semibold py-3 px-6"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-nytti-pink to-nytti-pink-dark px-6 py-3 font-bold text-white"
                 >
                   Åpne lenke
                   <span aria-hidden>→</span>
@@ -97,7 +122,7 @@ export default async function ContentDetailPage({
           <div className="border-t border-border px-8 sm:px-10 py-6">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-muted hover:text-foreground font-medium transition-colors"
+              className="inline-flex items-center gap-2 font-medium text-muted transition-colors hover:text-nytti-pink"
             >
               <span aria-hidden>←</span>
               Tilbake til feed
