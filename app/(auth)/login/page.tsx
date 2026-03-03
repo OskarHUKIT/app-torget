@@ -9,6 +9,9 @@ function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [resetMessage, setResetMessage] = useState<string | null>(null);
+  const [resetError, setResetError] = useState<string | null>(null);
+  const [resetLoading, setResetLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const supabase = createClient();
@@ -33,6 +36,29 @@ function LoginForm() {
       setError(err instanceof Error ? err.message : 'En feil oppstod');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    setResetError(null);
+    setResetMessage(null);
+    setError(null);
+
+    if (!email) {
+      setResetError('Skriv inn e-postadressen din først.');
+      return;
+    }
+
+    setResetLoading(true);
+    try {
+      const redirectTo = `${window.location.origin}/reset-password`;
+      const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+      if (error) throw error;
+      setResetMessage('Vi har sendt deg en lenke for å sette nytt passord.');
+    } catch (err) {
+      setResetError(err instanceof Error ? err.message : 'Kunne ikke sende reset-lenke');
+    } finally {
+      setResetLoading(false);
     }
   };
 
@@ -62,6 +88,16 @@ function LoginForm() {
               {error}
             </div>
           )}
+          {resetMessage && (
+            <div className="rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800 dark:border-green-800 dark:bg-green-900/20 dark:text-green-300">
+              {resetMessage}
+            </div>
+          )}
+          {resetError && (
+            <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300">
+              {resetError}
+            </div>
+          )}
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-contrast dark:text-gray-300">
@@ -81,9 +117,19 @@ function LoginForm() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-contrast dark:text-gray-300">
-              Passord
-            </label>
+            <div className="flex items-center justify-between">
+              <label htmlFor="password" className="block text-sm font-medium text-contrast dark:text-gray-300">
+                Passord
+              </label>
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                disabled={resetLoading}
+                className="text-xs font-semibold text-contrast hover:underline disabled:cursor-not-allowed disabled:opacity-60 dark:text-[#6b6fb8]"
+              >
+                {resetLoading ? 'Sender...' : 'Glemt passord?'}
+              </button>
+            </div>
             <input
               id="password"
               name="password"

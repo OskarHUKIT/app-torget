@@ -8,6 +8,15 @@ const withPWA = require('next-pwa')({
 
 const nextConfig = {
   reactStrictMode: true,
+  // Separate build artifacts for dev/prod to avoid cache collisions on Windows.
+  distDir: process.env.NODE_ENV === 'development' ? '.next-dev' : '.next',
+  webpack: (config, { dev }) => {
+    if (dev) {
+      // More stable in local dev when frequent restarts happen.
+      config.cache = false;
+    }
+    return config;
+  },
   images: {
     domains: ['localhost'],
     remotePatterns: [

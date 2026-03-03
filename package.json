@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:clean": "npm run clean && next dev",
     "build": "next build",
+    "build:clean": "npm run clean && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "node -e \"const fs=require('fs');['.next','.next-dev'].forEach((d)=>{try{fs.rmSync(d,{recursive:true,force:true});}catch(e){}});console.log('Cleaned .next and .next-dev');\""
   },
   "dependencies": {
     "@supabase/ssr": "^0.1.0",

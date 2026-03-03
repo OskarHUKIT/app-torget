@@ -4,6 +4,7 @@
 /node_modules
 /.pwd
 /.next
+/.next-dev
 /out
 
 # production
