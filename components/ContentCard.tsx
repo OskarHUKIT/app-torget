@@ -126,15 +126,17 @@ export default function ContentCard({ content, index = 0 }: ContentCardProps) {
                   </span>
                 )}
                 {content.url && (
-                  <a
-                    href={content.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      window.open(content.url as string, '_blank', 'noopener,noreferrer');
+                    }}
                     className="mt-3 inline-flex items-center gap-2 rounded-lg bg-nytti-pink px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-nytti-pink-dark"
                   >
                     {content.type === 'game' ? '▶ Spill' : 'Åpne app'}
-                  </a>
+                  </button>
                 )}
               </div>
             </div>
