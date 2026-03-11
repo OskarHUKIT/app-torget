@@ -42,7 +42,12 @@ export default function SignupPage() {
       }
       window.location.href = '/login?message=check-email';
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'En feil oppstod');
+      const message = err instanceof Error ? err.message : 'En feil oppstod';
+      setError(
+        message.includes('Failed to fetch') || message.includes('fetch failed')
+          ? 'Kunne ikke kontakte Supabase. Sjekk at NEXT_PUBLIC_SUPABASE_URL er riktig i .env.local.'
+          : message
+      );
     } finally {
       setLoading(false);
     }

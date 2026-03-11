@@ -35,13 +35,12 @@ export default function ClothesConceptPage() {
                 Konseptpresentasjon
               </p>
               <h1 className="font-display text-3xl font-extrabold text-foreground md:text-5xl">
-                Circular Closet
-                <span className="mt-1 block text-contrast">En premium tjeneste for bærekraftig bruk av klær</span>
+                Sirkulær mote
+                <span className="mt-1 block text-contrast">Et premium varemerke for bærekraftig bruk av klær</span>
               </h1>
               <p className="mt-4 max-w-2xl text-sm text-muted md:text-base">
-                Circular Closet hjelper folk å få mer verdi ut av klærne de allerede eier. I stedet for å kjøpe mer,
-                kan brukere oppdage, reparere, rotere og sette plagg i omløp igjen med målbar klimaeffekt og tydelig
-                lokal samfunnsverdi.
+                Et premium varemerke for bærekraftig bruk av klær: smartere gjenbruk, lengre levetid og lavere
+                klimaavtrykk. Miks dine kolleksjoner, finn enkelplagg og kjøp med trygghet.
               </p>
               <div className="mt-6 flex flex-wrap gap-2">
                 <span className="rounded-full bg-background/85 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300">

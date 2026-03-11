@@ -131,8 +131,8 @@ export default function DugnaderExplorer({ items }: DugnaderExplorerProps) {
     <motion.main variants={pageFadeIn} initial="initial" animate="animate" className="mx-auto max-w-6xl px-4 py-6 md:py-10">
       <div className="mb-6 grid gap-4 rounded-2xl border border-border bg-surface p-4 shadow-card md:grid-cols-[1fr_auto] md:items-center">
         <div>
-          <h1 className="font-display text-2xl font-bold text-foreground md:text-3xl">Dugnader og event</h1>
-          <p className="text-sm text-muted">Finn aktiviteter i nærheten, søk i alle oppføringer, og se alt på kart.</p>
+          <h1 className="font-display text-2xl font-bold text-foreground md:text-3xl">Dugnader</h1>
+          <p className="text-sm text-muted">Finn meningsfulle dugnader i nærheten av der du bor. Søk i alle oppføringer og orienterer deg på kartet.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <button

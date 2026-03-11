@@ -45,6 +45,9 @@ export default function Navbar() {
       <nav className="sticky top-0 z-40 hidden border-b border-[#EF5B99]/20 bg-[#EF5B99] md:block">
         <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-1">
+            <Link href="/om" className="rounded-lg px-3 py-2 text-sm font-medium text-white/90 transition-colors hover:bg-white/15">
+              Om
+            </Link>
             <Link href="/browse" className="rounded-lg px-3 py-2 text-sm font-medium text-white/90 transition-colors hover:bg-white/15">
               Bibliotek
             </Link>

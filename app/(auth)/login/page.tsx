@@ -33,7 +33,12 @@ function LoginForm() {
       const redirect = searchParams.get('redirect') || '/';
       window.location.href = redirect;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'En feil oppstod');
+      const message = err instanceof Error ? err.message : 'En feil oppstod';
+      setError(
+        message.includes('Failed to fetch') || message.includes('fetch failed')
+          ? 'Kunne ikke kontakte Supabase. Sjekk at NEXT_PUBLIC_SUPABASE_URL er riktig i .env.local.'
+          : message
+      );
     } finally {
       setLoading(false);
     }
@@ -56,7 +61,12 @@ function LoginForm() {
       if (error) throw error;
       setResetMessage('Vi har sendt deg en lenke for å sette nytt passord.');
     } catch (err) {
-      setResetError(err instanceof Error ? err.message : 'Kunne ikke sende reset-lenke');
+      const message = err instanceof Error ? err.message : 'Kunne ikke sende reset-lenke';
+      setResetError(
+        message.includes('Failed to fetch') || message.includes('fetch failed')
+          ? 'Kunne ikke kontakte Supabase. Sjekk at NEXT_PUBLIC_SUPABASE_URL er riktig i .env.local.'
+          : message
+      );
     } finally {
       setResetLoading(false);
     }

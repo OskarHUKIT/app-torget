@@ -34,10 +34,10 @@ const showcaseItems = [
   },
   {
     id: 'clothes',
-    title: 'Circular Closet Service',
+    title: 'Sirkulær mote',
     badge: '3. Investorfokus',
     description:
-      'Et premium konsept for bærekraftig bruk av klær: smartere gjenbruk, lengre levetid og lavere klimaavtrykk gjennom lokalsamfunnsdrevne verktøy.',
+      'Et premium varemerke for bærekraftig bruk av klær: smartere gjenbruk, lengre levetid og lavere klimaavtrykk. Miks dine kolleksjoner, finn enkelplagg og kjøp med trygghet.',
     cta: 'Utforsk konsept',
     href: '/clothes',
     accent: 'from-emerald-500/25 via-teal-500/15 to-cyan-500/10',
