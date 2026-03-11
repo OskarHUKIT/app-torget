@@ -18,8 +18,8 @@ export async function POST(request: NextRequest) {
 
     // Fallback for local/dev setups where private env vars are unavailable in runtime.
     // In that case, the gate still requires a manual unlock and stores a session cookie.
-    if (!expectedPassword && password.length < 4) {
-      return NextResponse.json({ error: 'Passord må være minst 4 tegn' }, { status: 400 });
+    if (!expectedPassword && password.length < 1) {
+      return NextResponse.json({ error: 'Passord kan ikke være tomt' }, { status: 400 });
     }
 
     const tokenBase = expectedPassword || password;
